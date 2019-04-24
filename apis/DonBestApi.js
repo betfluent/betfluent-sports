@@ -24,6 +24,9 @@ const getLines = (
   eventId
 ) => request.get({
   url: `${BASE_URL}v2/odds/${league}/` + (eventId ? `${eventId}/` : '')
+}).catch(err => {
+  console.log('ERROR ON GET LINES')
+  console.log(err)
 })
 
 const getSchedule = () => request.get({
@@ -40,7 +43,10 @@ const getTeams = () => request.get({
 
 const getTeam = (dbsTeamId) => request.get({
   url: `${BASE_URL}v2/team/${dbsTeamId}/`
-}).catch(err => console.log(err))
+}).catch(err => {
+  console.log('ERROR ON GET TEAM')
+  console.log(err)
+})
 
 module.exports = {
   getLines,
