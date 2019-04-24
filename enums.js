@@ -5,8 +5,8 @@ const donBest = Object.freeze({
     MLB: '5',
     NBA: '3',
     // NCAAF: '2',
-    NCAAMB: '4',
-    NFL: '1',
+    // NCAAMB: '4',
+    // NFL: '1',
     // NHL: '7',
     // SOCCER: '9',
     nameOf: function(leagueId) {
@@ -17,10 +17,10 @@ const donBest = Object.freeze({
           return 'NBA'
         // case this.NCAAF:
         //   return 'NCAAF'
-        case this.NCAAMB:
-          return 'NCAAMB'
-        case this.NFL:
-          return 'NFL'
+        // case this.NCAAMB:
+        //   return 'NCAAMB'
+        // case this.NFL:
+        //   return 'NFL'
         // case this.NHL:
         //   return 'NHL'
         // case this.SOCCER:

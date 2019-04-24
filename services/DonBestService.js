@@ -218,7 +218,7 @@ const setDonBestTeamIds = () => donBest.getTeams()
       if (!leagues) return
 
       const professionalLeagues = leagues.filter(({ $: league }) =>
-        [dbsLeagues.MLB, dbsLeagues.NBA, dbsLeagues.NFL].includes(league.id))
+        [dbsLeagues.MLB, dbsLeagues.NBA].includes(league.id))
 
       const collegeLeagues = leagues.filter(({ $: league }) =>
         [dbsLeagues.NCAAMB].includes(league.id))
