@@ -29,11 +29,11 @@ const donBest = Object.freeze({
     }
   },
   sportsbook: {
-    STATION: '122',
+    CONSENSUS: '347',
     nameOf: function(sportsbookId) {
       switch (sportsbookId) {
-        case this.STATION:
-          return 'STATION'
+        case this.CONSENSUS:
+          return 'CONSENSUS'
       }
     }
   }
