@@ -2,7 +2,7 @@
 
 const moment = require('moment')
 const schedule = require('node-schedule')
-const asynk = require('async')
+const eachLimit = require('async/eachLimit')
 const {
   getGameByTimeAndTeams,
   updateCurrentGameLine
@@ -234,7 +234,7 @@ const setDonBestTeamIds = () => donBest.getTeams()
               team.full_name[0] !== team.full_name[0].toUpperCase()) ||
             // exceptions to the rules above
             ['NFC', 'AFC'].includes(team.full_name[0]))
-          asynk.eachLimit(teams, 3, async team => {
+          eachLimit(teams, 3, async (team, callback) => {
             let bettorTeam = await getBettorTeam(leagueName, team)
             if (bettorTeam) {
               setDonBestTeamId(leagueName, team.$.id, bettorTeam.id)
@@ -254,6 +254,7 @@ const setDonBestTeamIds = () => donBest.getTeams()
               }
               newTeamRef.set(bettorTeam)
             }
+            callback();
           })
       })
 
@@ -388,7 +389,7 @@ const mapDbsEventToBettorGame = async (event, leagueName) => {
 
 const setUpcomingGamesAndLines = () => getUpcomingLeagueEvents()
   .then(leagueEvents => Object.keys(leagueEvents).forEach(leagueId => {
-    asynk.eachLimit(leagueEvents[leagueId], 3, async event => {
+    eachLimit(leagueEvents[leagueId], 3, async (event, callback) => {
       const leagueName = leagueId !== dbsLeagues.SOCCER
         ? dbsLeagues.nameOf(leagueId)
         : 'FIFA'
@@ -416,6 +417,7 @@ const setUpcomingGamesAndLines = () => getUpcomingLeagueEvents()
         gameRef.update(bettorGame)
         setCurrentGameLines(bettorGame, event.$.id)
       }
+      callback();
     })
   }))
 
