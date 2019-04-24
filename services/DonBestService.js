@@ -225,7 +225,7 @@ const setDonBestTeamIds = () => donBest.getTeams()
 
       professionalLeagues.forEach(league => {
         const leagueName = dbsLeagues.nameOf(league.$.id)
-        league.team
+        const teams = league.team
           .filter(team =>
             // filter duplicate teams & test teams in broad strokes
             (team.abbreviation[0].trim() &&
@@ -234,7 +234,7 @@ const setDonBestTeamIds = () => donBest.getTeams()
               team.full_name[0] !== team.full_name[0].toUpperCase()) ||
             // exceptions to the rules above
             ['NFC', 'AFC'].includes(team.full_name[0]))
-          .forEach(async team => {
+          asynk.eachLimit(teams, 3, async team => {
             let bettorTeam = await getBettorTeam(leagueName, team)
             if (bettorTeam) {
               setDonBestTeamId(leagueName, team.$.id, bettorTeam.id)
@@ -388,7 +388,7 @@ const mapDbsEventToBettorGame = async (event, leagueName) => {
 
 const setUpcomingGamesAndLines = () => getUpcomingLeagueEvents()
   .then(leagueEvents => Object.keys(leagueEvents).forEach(leagueId => {
-    asynk.eachLimit(leagueEvents[leagueId], 7, async event => {
+    asynk.eachLimit(leagueEvents[leagueId], 3, async event => {
       const leagueName = leagueId !== dbsLeagues.SOCCER
         ? dbsLeagues.nameOf(leagueId)
         : 'FIFA'
