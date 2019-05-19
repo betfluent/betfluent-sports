@@ -334,6 +334,8 @@ const setDonBestTeamIds = () => donBest.getTeams()
 
 const mapDbsEventToBettorGame = async (event, leagueName) => {
   const getTeam = async donBestTeamId => {
+    console.log(donBestTeamId)
+    if (!donBestTeamId) return null
     const teamsPath = `${leagueName === 'SOCCER' ? 'fifa' : leagueName.toLowerCase()}/teams`
     const snapshot = await firebase.database()
       .ref(teamsPath)
@@ -344,10 +346,6 @@ const mapDbsEventToBettorGame = async (event, leagueName) => {
       return Object.values(snapshot.val())[0]
     } else {
       const dbsTeamResponse = await donBest.getTeam(donBestTeamId)
-      if (!dbsTeamResponse.don_best_sports.league) {
-        console.log(JSON.stringify(dbsTeamResponse.don_best_sports))
-        return {}
-      }
       const dbsTeam = dbsTeamResponse.don_best_sports.league[0].team[0]
       const newTeamRef = firebase.database().ref(teamsPath).push()
       const newBettorTeam = {
