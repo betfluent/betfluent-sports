@@ -344,6 +344,7 @@ const mapDbsEventToBettorGame = async (event, leagueName) => {
       return Object.values(snapshot.val())[0]
     } else {
       const dbsTeamResponse = await donBest.getTeam(donBestTeamId)
+      console.log(dbsTeamResponse)
       const dbsTeam = dbsTeamResponse.don_best_sports.league[0].team[0]
       const newTeamRef = firebase.database().ref(teamsPath).push()
       const newBettorTeam = {
