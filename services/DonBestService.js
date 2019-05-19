@@ -343,8 +343,8 @@ const mapDbsEventToBettorGame = async (event, leagueName) => {
     if (snapshot.exists() && snapshot.hasChildren()) {
       return Object.values(snapshot.val())[0]
     } else {
-      if (!dbsTeamResponse.don_best_sports) {
-        console.log(JSON.stringify(dbsTeamResponse))
+      if (!dbsTeamResponse.don_best_sports.league) {
+        console.log(JSON.stringify(dbsTeamResponse.don_best_sports))
         return {}
       }
       const dbsTeamResponse = await donBest.getTeam(donBestTeamId)
