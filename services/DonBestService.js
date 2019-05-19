@@ -23,6 +23,12 @@ const getCurrentGameLines = (dbsLeagueId, dbsEventId) => donBest
       .filter(({ $: line }) => line.period === 'FG' && line.type === 'current')
   })
 
+const waitFiveSeconds = () => {
+  return new Promise(res => {
+    setTimeout(() => res(), 5000)
+  })
+}
+
 /**
  * Get a map of DonBest league Ids to an array of DonBest events
  * @returns {object} a Promise<{ [ leagueId: [event] ] }>
@@ -254,6 +260,7 @@ const setDonBestTeamIds = () => donBest.getTeams()
               }
               newTeamRef.set(bettorTeam)
             }
+            await waitFiveSeconds()
           }, err => {
             if (err) {
               console.log(err)
@@ -420,6 +427,7 @@ const setUpcomingGamesAndLines = () => getUpcomingLeagueEvents()
 
         gameRef.update(bettorGame)
         setCurrentGameLines(bettorGame, event.$.id)
+        await waitFiveSeconds()
       }
     }, (err) => {
       if (err) {
