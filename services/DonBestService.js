@@ -344,19 +344,21 @@ const mapDbsEventToBettorGame = async (event, leagueName) => {
       return Object.values(snapshot.val())[0]
     } else {
       const dbsTeamResponse = await donBest.getTeam(donBestTeamId)
-      const dbsTeam = dbsTeamResponse.don_best_sports.league && dbsTeamResponse.don_best_sports.league[0].team[0]
-      const newTeamRef = firebase.database().ref(teamsPath).push()
-      const newBettorTeam = {
-        abbr: dbsTeam.abbreviation[0].trim(),
-        id: newTeamRef.key,
-        // college market is same as name for donbest data; otherwise skip market if not college team
-        market: ['ncaamb', 'ncaaf'].includes(leagueName.toLowerCase()) ? dbsTeam.full_name[0].trim() : null,
-        name: dbsTeam.full_name[0].trim(),
-        donBestId: dbsTeam.$.id
-      }
-      await newTeamRef.set(newBettorTeam)
-      return newBettorTeam
+      if (dbsTeamResponse && dbsTeamResponse.don_best_sports && dbsTeamResponse.don_best_sports.league)
+        const dbsTeam = dbsTeamResponse.don_best_sports.league[0].team[0]
+        const newTeamRef = firebase.database().ref(teamsPath).push()
+        const newBettorTeam = {
+          abbr: dbsTeam.abbreviation[0].trim(),
+          id: newTeamRef.key,
+          // college market is same as name for donbest data; otherwise skip market if not college team
+          market: ['ncaamb', 'ncaaf'].includes(leagueName.toLowerCase()) ? dbsTeam.full_name[0].trim() : null,
+          name: dbsTeam.full_name[0].trim(),
+          donBestId: dbsTeam.$.id
+        }
+        await newTeamRef.set(newBettorTeam)
+        return newBettorTeam
     }
+    return null
   }
 
   const gameTime = moment.utc(event.$.date, 'YYYY-MM-DDThh:mm:ssZ').toDate().getTime()
