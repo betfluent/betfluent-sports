@@ -1,6 +1,6 @@
 'use strict'
 
-const firebase = require('./firebase')
+const firebase = require('firebase')
 
 const config = {
   apiKey: "AIzaSyA3vie3Ie_GuZiBEf9DilFSLaaxtGLtACs",
