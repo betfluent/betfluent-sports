@@ -10,6 +10,8 @@ const ncaambFile = require('./ncaamb/index-ncaamb')
 const nflFile = require('./nfl/index-nfl')
 
 const donbest = require('./donbest/index-donbest')
+const admin = require('./firebase')
+const firebase = require('./firebase-client')
 
 // fifaFile.start()
 // mlbFile.start()
@@ -19,3 +21,9 @@ const donbest = require('./donbest/index-donbest')
 // nflFile.start()
 
 donbest.start()
+
+admin.auth().createCustomToken(process.env.ADMIN_KEY)
+    .then(customToken => {
+        firebase.auth().signInWithCustomToken(customToken)
+            .catch(error => console.log(error))
+    })
