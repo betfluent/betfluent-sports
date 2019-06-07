@@ -42,6 +42,7 @@ function fetchLiveGame(leagueName, bettorGame) {
     donBest.getScore(bettorGame.donBestId)
       .catch(err => console.log(err.message))
       .then(response => response.don_best_sports.event[0])
+      .catch(err => console.log(`Error: ${bettorGame.leagueName} ${bettorGame.id}`))
       .then(game => {
         const current = game.current_score[0].$
         const periods = game.period_summary[0].period
