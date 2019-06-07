@@ -6,7 +6,10 @@ const request = require('request').defaults({
   json: true
 })
 
-const BASE_URL = 'https://boston-02108.herokuapp.com/api/'
+let BASE_URL
+
+if (process.env.BACKEND_ENV === 'debug') BASE_URL = 'https://providence-02108.herokuapp.com/api/'
+else BASE_URL = 'https://boston-02108.herokuapp.com/api/'
 
 const closeBet = async (betId) => {
   const session = {
