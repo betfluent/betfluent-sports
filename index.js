@@ -13,6 +13,13 @@ const donbest = require('./donbest/index-donbest')
 const admin = require('./firebase')
 const firebase = require('./firebase-client')
 
+const b64DecodeUnicode = str =>
+  decodeURIComponent(
+    Array.prototype.map
+      .call(atob(str), c => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+      .join("")
+  );
+
 // fifaFile.start()
 // mlbFile.start()
 // nbaFile.start()
@@ -21,6 +28,12 @@ const firebase = require('./firebase-client')
 // nflFile.start()
 
 donbest.start()
+
+firebase.auth().onAuthStateChanged(async authUser => {
+    const idToken = await authUser.getIdToken()
+    const userToken = JSON.parse(b64DecodeUnicode(idToken.split(".")[1]));
+    console.log(userToken)
+})
 
 admin.auth().createCustomToken(process.env.ADMIN_KEY)
     .then(customToken => {
