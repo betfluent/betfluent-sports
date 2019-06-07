@@ -13,8 +13,7 @@ const donbest = require('./donbest/index-donbest')
 const admin = require('./firebase')
 const firebase = require('./firebase-client')
 
-const b64DecodeUnicode = str =>
-    Buffer.from(str, 'base64')
+const betManager = require('./betManager')
 
 // fifaFile.start()
 // mlbFile.start()
@@ -25,16 +24,15 @@ const b64DecodeUnicode = str =>
 
 donbest.start()
 
-firebase.auth().onAuthStateChanged(async authUser => {
-    if (authUser) {
-        const idToken = await authUser.getIdToken()
-        const userToken = JSON.parse(b64DecodeUnicode(idToken.split(".")[1]));
-        console.log(userToken)
-    }
-})
-
 admin.auth().createCustomToken(process.env.ADMIN_KEY)
     .then(customToken => {
         firebase.auth().signInWithCustomToken(customToken)
+            .then(async () => {
+                const snap = await firebase.database().ref('mlb').orderByChild('status').equalTo('closed').once('value')
+                const games = Object.keys(snap.val())
+                games.forEach(gameId => {
+                  betManager.closeBetsForGame(gameId)  
+                })
+            })
             .catch(error => console.log(error))
     })
