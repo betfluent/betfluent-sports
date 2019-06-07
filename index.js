@@ -29,9 +29,9 @@ admin.auth().createCustomToken(process.env.ADMIN_KEY)
         firebase.auth().signInWithCustomToken(customToken)
             .then(async () => {
                 const snap = await firebase.database().ref('mlb/games').orderByChild('status').equalTo('closed').once('value')
-                const games = Object.keys(snap.val())
-                games.forEach(gameId => {
-                  betManager.closeBetsForGame(gameId)  
+                const games = Object.values(snap.val())
+                games.forEach(game => {
+                  betManager.closeBetsForGame(game)  
                 })
             })
             .catch(error => console.log(error))
