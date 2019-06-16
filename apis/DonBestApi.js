@@ -7,7 +7,6 @@
 const { requiredParam } = require('../utils')
 const { parseString } = require('xml2js')
 const request = require('request-promise').defaults({
-  'proxy': process.env.FIXIE_URL,
   qs: { token: process.env.DONBEST_API_TOKEN },
   transform: xmlBody => new Promise((resolve, reject) => {
     parseString(xmlBody, (err, result) => {
